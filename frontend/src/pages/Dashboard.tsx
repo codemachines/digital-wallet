@@ -10,7 +10,7 @@ import { useWallet } from '../contexts/WalletContext';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
-  const { wallet, setWallet } = useWallet();
+  const { wallet, setWallet, credentials } = useWallet();
   const [copied, setCopied] = useState(false);
   const navigate = useNavigate();
 
@@ -81,7 +81,7 @@ const Dashboard: React.FC = () => {
         <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-xl shadow-sm p-6 text-white flex flex-col justify-between min-h-[250px]">
           <div>
             <h2 className="text-lg font-medium text-indigo-200 mb-1">Holder Summary</h2>
-            <p className="text-3xl font-bold mt-2">0</p>
+            <p className="text-3xl font-bold mt-2">{credentials.length}</p>
             <p className="text-sm text-slate-400">Total Credentials</p>
           </div>
           <div className="mt-6 border-t border-slate-700 pt-4">

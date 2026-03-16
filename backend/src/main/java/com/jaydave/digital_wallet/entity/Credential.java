@@ -29,12 +29,16 @@ public class Credential {
 
     private String hash;
 
+    // Base64-encoded RSA public key stored per-credential so verification survives server restarts
+    @Column(columnDefinition = "TEXT")
+    private String issuerPublicKey;
+
     @ManyToOne
     @JoinColumn(name = "walletId", columnDefinition = "uuid")
     private Wallet wallet;
 
-    private LocalDateTime expiryAt;  // when the credential expires
-    private boolean revoked = false; // revocation status
+    private LocalDateTime expiryAt;
+    private boolean revoked = false;
 
     public Credential() {
     }
@@ -110,9 +114,13 @@ public class Credential {
         this.wallet = wallet;
     }
 
+    public String getIssuerPublicKey() { return issuerPublicKey; }
+    public void setIssuerPublicKey(String issuerPublicKey) { this.issuerPublicKey = issuerPublicKey; }
+
     public LocalDateTime getExpiryAt() { return expiryAt; }
     public void setExpiryAt(LocalDateTime expiryAt) { this.expiryAt = expiryAt; }
 
     public boolean isRevoked() { return revoked; }
     public void setRevoked(boolean revoked) { this.revoked = revoked; }
 }
+

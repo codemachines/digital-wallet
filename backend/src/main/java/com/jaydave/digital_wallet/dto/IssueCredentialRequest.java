@@ -8,6 +8,7 @@ public class IssueCredentialRequest {
     private String walletId;
     private String type;
     private String issuerDid;
+    private String subjectDid;
     private Map<String, Object> claims;
 
     private LocalDateTime expiryAt;
@@ -46,4 +47,12 @@ public class IssueCredentialRequest {
 
     public LocalDateTime getExpiryAt() { return expiryAt; }
     public void setExpiryAt(LocalDateTime expiryAt) { this.expiryAt = expiryAt; }
+
+    public String getSubjectDid() {
+        return subjectDid;
+    }
+
+    public void setSubjectDid(String subjectDid) {
+        this.subjectDid = subjectDid;
+    }
 }

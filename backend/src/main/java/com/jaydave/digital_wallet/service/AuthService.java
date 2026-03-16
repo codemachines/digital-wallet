@@ -48,7 +48,7 @@ public class AuthService {
 
         user.setWallet(wallet);
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
         return new AuthResponse(token, user.getName(), user.getEmail(), wallet.getDidWalletId(), user.getRole());
     }
@@ -63,8 +63,10 @@ public class AuthService {
             throw new RuntimeException("Invalid password");
         }
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
-        return new AuthResponse(token, user.getName(), user.getEmail(), user.getWallet().getDidWalletId(), user.getRole());
+        AuthResponse response = new AuthResponse(token, user.getName(), user.getEmail(), user.getWallet().getDidWalletId(), user.getRole());
+        System.out.println("LOGIN: Email=" + response.getEmail() + ", Role=" + response.getRole() + ", DID=" + response.getDidWalletId());
+        return response;
     }
 }

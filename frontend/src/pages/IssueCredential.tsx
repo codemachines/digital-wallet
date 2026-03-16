@@ -26,13 +26,10 @@ const IssueCredential: React.FC = () => {
     setSuccessMsg(null);
 
     try {
-      // Build the credential payload exactly as requested by user's working JSON example
-      const payload = {
-        id: `cred-${Math.floor(Math.random() * 10000)}`,
+      const payload: any = {
         type: data.type || "EducationCredential",
-        issuer: user?.id || `did:issuer:dummy-${user?.email || 'issuer'}`,
         walletId: data.subject,
-        issuedAt: new Date().toISOString().split('T')[0], // The user's example had "YYYY-MM-DD" formatted issuedAt
+        subjectDid: data.subject,
         claims: {
           name: data.claimName,
           degree: data.claimDegree,
@@ -41,6 +38,12 @@ const IssueCredential: React.FC = () => {
         }
       };
 
+      // Optional expiry — convert datetime-local string to ISO-8601
+      if (data.expiryAt) {
+        payload.expiryAt = new Date(data.expiryAt).toISOString().replace('Z', '');
+      }
+
+      console.log('Issuing credential with payload:', payload);
       await issueCredential(payload);
       setSuccessMsg("Credential issued successfully!");
       reset(); // Clear form
@@ -131,17 +134,35 @@ const IssueCredential: React.FC = () => {
                      className="w-full appearance-none rounded-lg border border-slate-300 px-4 py-2.5 focus:border-indigo-500 focus:ring-indigo-500"
                    />
                 </div>
-                <div>
-                   <label className="block text-sm font-medium text-slate-700 mb-2">Graduation Year</label>
-                   <input
-                     type="number"
-                     placeholder="2022"
-                     {...register('claimYear', { required: 'Year is required' })}
-                     className="w-full appearance-none rounded-lg border border-slate-300 px-4 py-2.5 focus:border-indigo-500 focus:ring-indigo-500"
-                   />
-                </div>
+                 <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Graduation Year</label>
+                    <input
+                      type="number"
+                      placeholder="2022"
+                      {...register('claimYear', { required: 'Year is required' })}
+                      className="w-full appearance-none rounded-lg border border-slate-300 px-4 py-2.5 focus:border-indigo-500 focus:ring-indigo-500"
+                    />
+                 </div>
+              </div>
+           </div>
+
+           <div>
+             <h3 className="text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-100">
+               Validity
+               <span className="ml-2 text-xs font-normal text-slate-400">(optional)</span>
+             </h3>
+             <div className="max-w-xs">
+               <label className="block text-sm font-medium text-slate-700 mb-2">
+                 Expiry Date &amp; Time
+                 <span className="ml-1 text-slate-400 text-xs">(leave blank for no expiry)</span>
+               </label>
+               <input
+                 type="datetime-local"
+                 {...register('expiryAt')}
+                 className="w-full appearance-none rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+               />
              </div>
-          </div>
+           </div>
 
           <div className="pt-4 flex justify-end">
             <button
